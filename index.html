@@ -309,7 +309,8 @@
         <div class="section-heading">🥩 لحم العجل البلدي والمفروم الطازج</div>
         <div class="meat-card" id="card-beef">
             <div class="card-image-wrapper">
-                <img src="https://images.unsplash.com/photo-1603048297172-c92544798d5e?q=80&w=1000&auto=format&fit=crop" alt="لحم عجل بلدي">
+                <!-- يمكنك تغيير رابط الصورة هنا -->
+                <img src="https://cdn.discordapp.com/attachments/1497317167287373996/1510634615625486426/images.png?ex=6a1d879e&is=6a1c361e&hm=a692372dfcb6d8d9ea54cac4c3413445c38680b861b3b462baa78b1b479f79bd&" alt="لحم عجل بلدي">
             </div>
             <div class="card-content">
                 <h2>قطع لحم عجل هبرة ومفروم طازج</h2>
@@ -353,7 +354,8 @@
         <div class="section-heading">🔪 كبدة طازجة يومياً</div>
         <div class="meat-card" id="card-liver">
             <div class="card-image-wrapper">
-                <img src="https://images.unsplash.com/photo-1594385208974-2e75f8d7522c?q=80&w=1000&auto=format&fit=crop" alt="كبدة طازجة">
+                <!-- يمكنك تغيير رابط الصورة هنا -->
+                <img src="https://cdn.discordapp.com/attachments/1497317167287373996/1510633845538685128/78553a59-467a-4d01-b2f9-9ffd7afef94a-1000x1000-foV3H1cTnxFcWTrlOb95em24o3BSMG2JTURSHShq.png?ex=6a1d86e6&is=6a1c3566&hm=bcf226ea92987bed0ce4f303982454306a256fe4af4ce6e80f529dd97f3fea10&" alt="كبدة طازجة">
             </div>
             <div class="card-content">
                 <h2>كبدة وقلوب طازجة ونظيفة بالكامل</h2>
@@ -385,7 +387,8 @@
         <div class="section-heading">🍢 قسم المشويات والتتبيلات السرية للوسام</div>
         <div class="meat-card" id="card-bbq">
             <div class="card-image-wrapper">
-                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1000&auto=format&fit=crop" alt="مشويات متبلة">
+                <!-- يمكنك تغيير رابط الصورة هنا -->
+                <img src="https://cdn.discordapp.com/attachments/1497317167287373996/1510634981435904123/9k.png?ex=6a1d87f5&is=6a1c3675&hm=1ed5a691b7e7b623456edd8fb2b856aebb0c9aa93749a8871b90cae685ac0769&" alt="مشويات متبلة">
             </div>
             <div class="card-content">
                 <h2>مشويات فاخرة مجهزة للنار والشوي جاهزة</h2>
@@ -411,6 +414,7 @@
         <div class="section-heading">🥚 قسم البيض البلدي الطازج</div>
         <div class="meat-card" id="card-eggs">
             <div class="card-image-wrapper">
+                <!-- يمكنك تغيير رابط الصورة هنا -->
                 <img src="https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?q=80&w=1000&auto=format&fit=crop" alt="بيض طازج">
             </div>
             <div class="card-content">
@@ -460,19 +464,25 @@
 
         function selectProductWeight(productId, weightLabel, itemCost, pillElement) {
             var allSiblings = pillElement.parentNode.getElementsByClassName('weight-pill');
+            var isAlreadyActive = pillElement.classList.contains('active');
+
             for(var i = 0; i < allSiblings.length; i++) {
                 allSiblings[i].classList.remove('active');
             }
             
-            pillElement.classList.add('active');
-            
-            activeOrderSession[productId].isSelected = true;
-            activeOrderSession[productId].weightTitle = weightLabel;
-            activeOrderSession[productId].cost = itemCost;
-            
             var targetPrefBox = document.getElementById('pref-' + productId);
-            if(targetPrefBox) {
-                targetPrefBox.classList.add('visible');
+
+            if (isAlreadyActive) {
+                activeOrderSession[productId].isSelected = false;
+                activeOrderSession[productId].weightTitle = '';
+                activeOrderSession[productId].cost = 0;
+                if(targetPrefBox) targetPrefBox.classList.remove('visible');
+            } else {
+                pillElement.classList.add('active');
+                activeOrderSession[productId].isSelected = true;
+                activeOrderSession[productId].weightTitle = weightLabel;
+                activeOrderSession[productId].cost = itemCost;
+                if(targetPrefBox) targetPrefBox.classList.add('visible');
             }
             
             updateLiveTotalSum();
