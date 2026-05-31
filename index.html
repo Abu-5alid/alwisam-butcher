@@ -250,7 +250,7 @@
             
             <!-- لحم غنم بلدي -->
             <div class="card" id="card-ghanam" onclick="toggleCard('ghanam')">
-                <img src="https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=600&q=80" alt="لحم غنم بلدي طازج" class="product-img">
+                <img src="https://images.unsplash.com/photo-1551028150-64b9f398f678?auto=format&fit=crop&w=600&q=80" alt="لحم غنم نيء طازج" class="product-img">
                 <div class="card-content">
                     <div>
                         <h3>لحم غنم بلدي طازج</h3>
@@ -275,7 +275,7 @@
 
             <!-- قسم لحم العجل الطازج والمفروم -->
             <div class="card" id="card-minced" onclick="toggleCard('minced')">
-                <img src="https://images.unsplash.com/photo-1588168333986-50d8184b2288?auto=format&fit=crop&w=600&q=80" alt="لحم عجل طازج مفروم وقطع" class="product-img">
+                <img src="https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?auto=format&fit=crop&w=600&q=80" alt="لحم مفروم وقطع نيئة" class="product-img">
                 <div class="card-content">
                     <div>
                         <h3>لحم عجل بلدي طازج ومفروم</h3>
@@ -301,7 +301,7 @@
 
             <!-- قسم الكبدة والقلوب -->
             <div class="card" id="card-leever" onclick="toggleCard('leever')">
-                <img src="https://images.unsplash.com/photo-1628294895950-9805252327bc?auto=format&fit=crop&w=600&q=80" alt="كبدة طازجة ونظيفة" class="product-img">
+                <img src="https://images.unsplash.com/photo-1616614488314-1e0c8ef3fc29?auto=format&fit=crop&w=600&q=80" alt="كبدة نيئة طازجة" class="product-img">
                 <div class="card-content">
                     <div>
                         <h3>كبدة وقلوب طازجة يومياً</h3>
@@ -332,7 +332,7 @@
             
             <!-- برجر اللحم الفاخر -->
             <div class="card" id="card-burger" onclick="toggleCard('burger')">
-                <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80" alt="أقراص برجر لحم متبل" class="product-img">
+                <img src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=600&q=80" alt="أقراص برجر نيئة ومتبلة" class="product-img">
                 <div class="card-content">
                     <div>
                         <h3>برجر لحم الوسام الفاخر</h3>
@@ -350,7 +350,7 @@
 
             <!-- شيش طاووق الدجاج -->
             <div class="card" id="card-tawook" onclick="toggleCard('tawook')">
-                <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80" alt="أسياخ مشويات شيش طاووق" class="product-img">
+                <img src="https://images.unsplash.com/photo-1627662236973-4f8259fa2441?auto=format&fit=crop&w=600&q=80" alt="أسياخ طاووق دجاج نيئة" class="product-img">
                 <div class="card-content">
                     <div>
                         <h3>شيش طاووق دجاج بالخضار</h3>
@@ -368,7 +368,7 @@
 
             <!-- دجاج متبل كامل -->
             <div class="card" id="card-chicken" onclick="toggleCard('chicken')">
-                <img src="https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=600&q=80" alt="دجاج متبل كامل للشواء" class="product-img">
+                <img src="https://images.unsplash.com/photo-1629747387925-6905ff5a558a?auto=format&fit=crop&w=600&q=80" alt="دجاجة كاملة متبلة نيئة" class="product-img">
                 <div class="card-content">
                     <div>
                         <h3>دجاج متبل كامل بالليمون والفلفل</h3>
@@ -391,7 +391,7 @@
         <div class="grid">
             
             <div class="card" id="card-egg" onclick="toggleCard('egg')" style="max-width: 350px;">
-                <img src="https://images.unsplash.com/photo-1516448620398-c5f44bf9f441?auto=format&fit=crop&w=600&q=80" alt="طبق بيض طازج 30 حبة" class="product-img">
+                <img src="https://images.unsplash.com/photo-1516448620398-c5f44bf9f441?auto=format&fit=crop&w=600&q=80" alt="طبق بيض طازج" class="product-img">
                 <div class="card-content">
                     <div>
                         <h3>طبق بيض طازج الكبر</h3>
@@ -480,17 +480,13 @@
             checkCuttingVisibility();
         }
 
-        // دالة ذكية لإظهار أو إخفاء حقل التقطيع بناء على طلب الزبون
         function checkCuttingVisibility() {
             var cuttingSection = document.getElementById('cutting-section');
-            
-            // إذا اختار الزبون غنم، أو اختار عجل (بشرط ألا يكون مفروم فقط)
             var hasGhanam = quantities['ghanam'] > 0;
             var hasBeefCut = false;
             
             if(quantities['minced'] > 0) {
                 var beefType = document.getElementById('minced-type').value;
-                // إذا كان الاختيار ليس مفروم (يعني قطع بالعظام أو هبرة) يظهر خيار التقطيع
                 if(beefType !== "مفروم عجل طازج") {
                     hasBeefCut = true;
                 }
@@ -537,7 +533,6 @@
             var date = document.getElementById('booking-date').value;
             var packaging = document.getElementById('packaging-style').value;
             
-            // فحص إذا كان خيار التقطيع ظاهراً للعميل نأخذ قيمته، وإلا نكتب لا يحتاج
             var cuttingSection = document.getElementById('cutting-section');
             var cutting = "لا يحتاج تقطيع (مشويات أو مفروم)";
             if(cuttingSection.style.display === "block") {
