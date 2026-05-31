@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملحمة الوسام | نظام الحجز باللمس المطور</title>
+    <style>
+        :root {
+            --primary-color: #e60000;
+            --secondary-color: #25D366;
+            --dark-color: #111;
+            --light-bg: #f8f9fa;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: var(--dark-color);
+        }
+        
+        /* شريط الأخبار والإعلانات المتحرك المطور */
+        .news-ticker {
+            background: #ffcc00;
+            color: #111;
+            font-weight: bold;
+            padding: 10px 0;
+            font-size: 1.05rem;
+            border-bottom: 2px solid #e6b800;
+            overflow: hidden;
+            position: relative;
+            white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .ticker-text {
+            display: inline-block;
+            padding-right: 100%;
+            animation: ticker 25s linear infinite;
+        }
+        @keyframes ticker {
+            0% { transform: translate3d(100%, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+        .news-title {
+            background: #e60000;
+            color: white;
+            padding: 10px 15px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 10;
+            font-weight: bold;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+        }
+
+        .hero-header {
+            background: linear-gradient(rgba(230, 0, 0, 0.95), rgba(150, 0, 0, 0.98)), url('https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=1200&q=80') center/cover;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .hero-header h1 { margin: 0; font-size: 2.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .hero-header .sub-title { font-size: 1.4rem; font-weight: bold; margin-top: 5px; opacity: 0.9; }
+        .hero-header p { font-size: 1.15rem; margin: 15px auto 0 auto; max-width: 650px; opacity: 0.9; line-height: 1.6; }
+
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
+        
+        .shop-info {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 35px;
+            font-weight: bold;
+        }
+        .info-tag { color: var(--primary-color); }
+
+        .section-title {
+            border-right: 5px solid var(--primary-color);
+            padding-right: 15px;
+            color: var(--primary-color);
+            margin: 40px 0 20px 0;
+            font-size: 1.6rem;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 2px solid #eee;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        
+        .card.selected {
+            border-color: var(--secondary-color);
+            background-color: #f4fff7;
+            box-shadow: 0 6px 18px rgba(37, 211, 102, 0.15);
+        }
+        
+        .card.selected::before {
+            content: "✓ تم اختيار الصنف";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--secondary-color);
+            color: white;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-radius: 20px;
+            z-index: 5;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card h3 { margin: 0 0 8px 0; font-size: 1.25rem; color: #222; }
+        .card p { color: #666; font-size: 0.9rem; margin: 0 0 12px 0; min-height: 35px; line-height: 1.4; }
+        
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: bold; color: #555; margin-bottom: 4px; }
+        .form-group select {
+            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit;
+            background-color: white;
+        }
+
+        .quantity-controller {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 10px 0;
+            opacity: 0.4;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .card.selected .quantity-controller {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .btn-qty {
+            background: #eee;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .btn-qty:hover { background: #ddd; }
+        .card.selected .btn-qty { background: var(--secondary-color); color: white; }
+        .card.selected .btn-qty:hover { background: #1ebd54; }
+        
+        .qty-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .price-tag { font-size: 1.3rem; color: #777; font-weight: bold; margin-top: 5px; text-align: center; background: #f9f9f9; padding: 6px; border-radius: 6px; border: 1px dashed #ddd; }
+        .card.selected .price-tag { color: var(--primary-color); background: #fff5f5; border-color: #ffcccc; }
+
+        .booking-box {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-top: 6px solid var(--primary-color);
+        }
+        .booking-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .full-width { grid-column: 1 / -1; }
+        
+        .btn-submit {
+            background-color: var(--secondary-color);
+            color: white; border: none; padding: 14px; font-size: 1.2rem; font-weight: bold;
+            border-radius: 8px; cursor: pointer; width: 100%; display: block; text-align: center;
+            text-decoration: none; box-shadow: 0 3px 6px rgba(0,0,0,0.1); transition: background 0.2s;
+        }
+        .btn-submit:hover { background-color: #1ebd54; }
+
+        footer { text-align: center; padding: 30px; color: #777; font-size: 0.9rem; margin-top: 50px; border-top: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+
+    <!-- شريط الإعلانات والأخبار المتحرك الجديد (تستطيع تغيير الكلام بسهولة) -->
+    <div class="news-ticker">
+        <div class="news-title">📢 آخر الأخبار</div>
+        <div class="ticker-text">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 🔥 ترقبوا وصول دفعة جديدة من العجل البلدي الطازج في السوق غداً صباحاً.. احجز نصيبك الآن! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 🥩 ملحمة الوسام توفر لكم أجود قطعيات غنم وعجل مذبوحة يومياً تحت إشراف طبي كامل.
+        </div>
+    </div>
+
+    <div class="hero-header">
+        <h1>ملحمة الوسام</h1>
+        <div class="sub-title">AL WISAM BUTCHER</div>
+        <p>اضغط مباشرة على صورة أي صنف لتفعيله واختياره، ثم حدد الوزن المطلوب بسهولة بالضغط على الزر لإضافته للحجز.</p>
+    </div>
+
+    <div class="container">
+        
+        <div class="shop-info">
+            <div>📞 للاستفسار: <span class="info-tag">35946352</span></div>
+            <div>📸 إنستغرام: <span class="info-tag">@alwisam.bh</span></div>
+            <div>📄 السجل التجاري: <span class="info-tag">192174-1</span></div>
+            <div>📍 نوع الخدمة: <span class="info-tag">استلام جاهز ومغلف من الملحمة</span></div>
+        </div>
+
+        <!-- ================= قسم اللحوم الطازجة ================= -->
+        <div class="section-title">🥩 قسم اللحوم الطازجة والقطعيات (اضغط للاختيار)</div>
+        <div class="grid">
+            
+            <!-- لحم غنم بلدي -->
+            <div class="card" id="card-ghanam" onclick="toggleCard('ghanam')">
+                <img src="https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=500&q=80" alt="لحم غنم بلدي" class="product-img">
+                <div class="card-content">
+                    <div>
+                        <h3>لحم غنم بلدي طازج</h3>
+                        <p>لحم غنم طازج مذبوح يومياً، متوفر بالعظم أو بدون عظم.</p>
+                        <div class="form-group" onclick="event.stopPropagation();">
+                            <label>النوع المطلوب:</label>
+                            <select id="ghanam-type" onchange="calculatePrice('ghanam')">
+                                <option value="بالعظام" data-price="6.000">بالعظام - 6.000 د.ب للكيلو</option>
+                                <option value="بدون عظام (هبرة)" data-price="7.500">بدون عظام - 7.500 د.ب للكيلو</option>
+                            </select>
+                        </div>
+                        
+                        <div class="quantity-controller" onclick="event.stopPropagation();">
+                            <button class="btn-qty" onclick="changeQty('ghanam', -0.5)">-</button>
+                            <div class="qty-display" id="ghanam-qty-txt">0 كجم</div>
+                            <button class="btn-qty" onclick="changeQty('ghanam', 0.5)">+</button>
+                        </div>
+                    </div>
+                    <div class="price-tag" id="ghanam-total">غير محدد</div>
+                </div>
+            </div>
+
+            <!-- قسم لحم العجل الطازج (المطور) -->
+            <div class="card" id="card-minced" onclick="toggleCard('minced')">
+                <img src="https://images.unsplash.com/photo-1588168333986-50d8184b2288?auto=format&fit=crop&w=500&q=80" alt="لحم عجل طازج" class="product-img">
+                <div class="card-content">
+                    <div>
+                        <h3>لحم عجل بلدي طازج ومفروم</h3>
+                        <p>قطع لحم عجل طازجة حسب رغبتك، أو مفرومة ناعمة فور الطلب.</p>
+                        <div class="form-group" onclick="event.stopPropagation();">
+                            <label>نوع ونوعية العجل:</label>
+                            <select id="minced-type" onchange="calculatePrice('minced')">
+                                <option value="قطع عجل بالعظام" data-price="4.500">عجل بالعظام - 4.500 د.ب للكيلو</option>
+                                <option value="عجل بدون عظام (هبرة)" data-price="5.500">عجل بدون عظام - 5.500 د.ب للكيلو</option>
+                                <option value="مفروم عجل طازج" data-price="5.500">مفروم عجل طازج - 5.500 د.ب للكيلو</option>
+                            </select>
+                        </div>
+                        
+                        <div class="quantity-controller" onclick="event.stopPropagation();">
+                            <button class="btn-qty" onclick="changeQty('minced', -0.5)">-</button>
+                            <div class="qty-display" id="minced-qty-txt">0 كجم</div>
+                            <button class="btn-qty" onclick="changeQty('minced', 0.5)">+</button>
+                        </div>
+                    </div>
+                    <div class="price-tag" id="minced-total">غير محدد</div>
+                </div>
+            </div>
+
+            <!-- قسم الكبدة والقلوب -->
+            <div class="card" id="card-leever" onclick="toggleCard('leever')">
+                <img src="https://images.unsplash.com/photo-1628294895950-9805252327bc?auto=format&fit=crop&w=500&q=80" alt="كبدة طازجة" class="product-img">
+                <div class="card-content">
+                    <div>
+                        <h3>كبدة وقلوب طازجة يومياً</h3>
+                        <p>كبدة بلدي طازجة ممتازة جاهزة ومقطعة ونظيفة للبحرين.</p>
+                        <div class="form-group" onclick="event.stopPropagation();">
+                            <label>الخيارات المتاحة:</label>
+                            <select id="leever-type" onchange="calculatePrice('leever')">
+                                <option value="كبدة طازجة صافي" data-price="6.500">كبدة صافي - 6.500 د.ب للكيلو</option>
+                                <option value="مشكل كبدة وقلوب" data-price="6.000">كبدة وقلوب - 6.000 د.ب للكيلو</option>
+                            </select>
+                        </div>
+                        
+                        <div class="quantity-controller" onclick="event.stopPropagation();">
+                            <button class="btn-qty" onclick="changeQty('leever', -0.5)">-</button>
+                            <div class="qty-display" id="leever-qty-txt">0 كجم</div>
+                            <button class="btn-qty" onclick="changeQty('leever', 0.5)">+</button>
+                        </div>
+                    </div>
+                    <div class="price-tag" id="leever-total">غير محدد</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= قسم المشويات والتتبيلات ================= -->
+        <div class="section-title">🍢 قسم التتبيلات والمشويات الجاهزة (اضغط للاختيار)</div>
+        <div class="grid">
+            
+            <!-- برجر اللحم الفاخر -->
+            <div class="card" id="card-burger" onclick="toggleCard('burger')">
+                <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=500&q=80" alt="برجر ملحمة الوسام" class="product-img">
+                <div class="card-content">
+                    <div>
+                        <h3>برجر لحم الوسام الفاخر</h3>
+                        <p>أقراص برجر مصنوعة من اللحم المتبل الطازج ومجهزة بداخل طبق فلين.</p>
+                        
+                        <div class="quantity-controller" style="margin-top:25px;" onclick="event.stopPropagation();">
+                            <button class="btn-qty" onclick="changeQty('burger', -0.5)">-</button>
+                            <div class="qty-display" id="burger-qty-txt">0 كجم</div>
+                            <button class="btn-qty" onclick="changeQty('burger', 0.5)">+</button>
+                        </div>
+                    </div>
+                    <div class="price-tag" id="burger-total" data-price="5.800">غير محدد</div>
+                </div>
+            </div>
+
+            <!-- شيش طاووق الدجاج -->
+            <div class="card" id="card-tawook" onclick="toggleCard('tawook')">
+                <img src="https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=500&q=80" alt="شيش طاووق" class="product-img">
+                <div class="card-content">
+                    <div>
+                        <h3>شيش طاووق دجاج بالخضار</h3>
+                        <p>قطع دجاج متبلة بالخلطة ومجهزة بالكامل في أسياخ للشوي.</p>
+                        
+                        <div class="quantity-controller" style="margin-top:25px;" onclick="event.stopPropagation();">
+                            <button class="btn-qty" onclick="changeQty('tawook', -0.5)">-</button>
+                            <div class="qty-display" id="tawook-qty-txt">0 كجم</div>
+                            <button class="btn-qty" onclick="changeQty('tawook', 0.5)">+</button>
+                        </div>
+                    </div>
+                    <div class="price-tag" id="tawook-total" data-price="4.800">غير محدد</div>
+                </div>
+            </div>
+
+            <!-- دجاج متبل كامل -->
+            <div class="card" id="card-chicken" onclick="toggleCard('chicken')">
+                <img src="https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=500&q=80" alt="دجاج متبل كامل" class="product-img">
+                <div class="card-content">
+                    <div>
+                        <h3>دجاج متبل كامل بالليمون والفلفل</h3>
+                        <p>دجاجة كاملة مفتوحة ومنقوعة بتتبيلة الوسام الفاخرة للفرن أو الشواية.</p>
+                        
+                        <div class="quantity-controller" style="margin-top:25px;" onclick="event.stopPropagation();">
+                            <button class="btn-qty" onclick="changeQty('chicken', -1)">-</button>
+                            <div class="qty-display" id="chicken-qty-txt">0 حبة</div>
+                            <button class="btn-qty" onclick="changeQty('chicken', 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="price-tag" id="chicken-total" data-price="3.500">غير محدد</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= قسم البيض الطازج ================= -->
+        <div class="section-title">🥚 قسم البيض الطازج</div>
+        <div class="grid">
+            
+            <div class="card" id="card-egg" onclick="toggleCard('egg')" style="max-width: 350px;">
+                <img src="https://images.unsplash.com/photo-1516448620398-c5f44bf9f441?auto=format&fit=crop&w=500&q=80" alt="طبق بيض" class="product-img">
+                <div class="card-content">
+                    <div>
+                        <h3>طبق بيض طازج الكبر</h3>
+                        <p>أطباق بيض طازجة ونظيفة يومياً (الطبق يحتوي على 30 حبة).</p>
+                        
+                        <div class="quantity-controller" onclick="event.stopPropagation();">
+                            <button class="btn-qty" onclick="changeQty('egg', -1)">-</button>
+                            <div class="qty-display" id="egg-qty-txt">0 طبق</div>
+                            <button class="btn-qty" onclick="changeQty('egg', 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="price-tag" id="egg-total" data-price="1.800">غير محدد</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= استمارة حجز موعد الحضور والاستلام ================= -->
+        <div class="section-title">📅 بيانات حجز موعد الاستلام من المحل</div>
+        <div class="booking-box">
+            <div class="booking-form">
+                <div class="form-group">
+                    <label>اسم الحاجز الكريم:</label>
+                    <input type="text" id="buyer-name" placeholder="اكتب اسمك الكريم">
+                </div>
+                <div class="form-group">
+                    <label>يوم وتاريخ الحضور للاستلام:</label>
+                    <input type="date" id="booking-date">
+                </div>
+                <div class="form-group">
+                    <label>طريقة التقطيع المرغوبة:</label>
+                    <select id="cutting-style">
+                        <option>تقطيع ثلاجة صغير (للطبخ والكبسات)</option>
+                        <option>تقطيع أرباع كبيرة</option>
+                        <option>مفطح كامل</option>
+                        <option>لا يوجد لحم قطع (مشويات ومفروم فقط)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>نوع التغليف المفضل لحفظ اللحوم:</label>
+                    <select id="packaging-style">
+                        <option>تغليف سحب الهواء الشامل (شفط للحفاظ على الطراوة)</option>
+                        <option>أطباق فلين مغلفة عادية</option>
+                    </select>
+                </div>
+                
+                <div class="full-width" style="margin-top: 15px;">
+                    <button class="btn-submit" onclick="submitAllToWhatsapp()">إرسال تفاصيل الحجز وتجهيز الطلب للاستلام الفوري 💬</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        جميع الحقوق محفوظة © ملحمة الوسام - مملكة البحرين | منصة الحجز المسبق باللمس
+    </footer>
+
+    <script>
+        var quantities = { ghanam: 0, minced: 0, leever: 0, burger: 0, tawook: 0, chicken: 0, egg: 0 };
+
+        function toggleCard(id) {
+            var card = document.getElementById('card-' + id);
+            if(card.classList.contains('selected')) {
+                card.classList.remove('selected');
+                quantities[id] = 0;
+                updateDisplay(id);
+            } else {
+                card.classList.add('selected');
+                quantities[id] = (id === 'chicken' || id === 'egg') ? 1 : 1.0;
+                updateDisplay(id);
+            }
+        }
+
+        function changeQty(id, delta) {
+            quantities[id] += delta;
+            if(quantities[id] < 0) quantities[id] = 0;
+            
+            if(quantities[id] === 0) {
+                document.getElementById('card-' + id).classList.remove('selected');
+            }
+            updateDisplay(id);
+        }
+
+        function updateDisplay(id) {
+            var qty = quantities[id];
+            var unit = (id === 'chicken') ? " حبة" : (id === 'egg' ? " طبق" : " كجم");
+            
+            document.getElementById(id + '-qty-txt').innerText = qty + unit;
+            
+            var totalElement = document.getElementById(id + '-total');
+            if(qty === 0) {
+                totalElement.innerText = "غير محدد";
+                return;
+            }
+
+            if(id === 'ghanam' || id === 'minced' || id === 'leever') {
+                var select = document.getElementById(id + '-type');
+                var pricePerKg = parseFloat(select.options[select.selectedIndex].getAttribute('data-price'));
+                totalElement.innerText = (pricePerKg * qty).toFixed(3) + " د.ب";
+            } else {
+                var pricePerUnit = parseFloat(totalElement.getAttribute('data-price'));
+                totalElement.innerText = (pricePerUnit * qty).toFixed(3) + " د.ب";
+            }
+        }
+
+        function calculatePrice(id) {
+            if(quantities[id] > 0) {
+                updateDisplay(id);
+            }
+        }
+
+        function submitAllToWhatsapp() {
+            var name = document.getElementById('buyer-name').value;
+            var date = document.getElementById('booking-date').value;
+            var cutting = document.getElementById('cutting-style').value;
+            var packaging = document.getElementById('packaging-style').value;
+
+            if(!name || !date) {
+                alert("يرجى كتابة اسمك الكريم وتحديد تاريخ الحضور لتأكيد حجزك.");
+                return;
+            }
+
+            var orderDetails = "";
+            var grandTotal = 0;
+            
+            if(quantities['ghanam'] > 0) {
+                var p = quantities['ghanam'] * parseFloat(document.getElementById('ghanam-type').options[document.getElementById('ghanam-type').selectedIndex].getAttribute('data-price'));
+                grandTotal += p;
+                orderDetails += "• غنم بلدي طازج (" + document.getElementById('ghanam-type').value + "): " + quantities['ghanam'] + " كجم [السعر: " + p.toFixed(3) + " د.ب]\n";
+            }
+
+            if(quantities['minced'] > 0) {
+                var p = quantities['minced'] * parseFloat(document.getElementById('minced-type').options[document.getElementById('minced-type').selectedIndex].getAttribute('data-price'));
+                grandTotal += p;
+                orderDetails += "• لحم عجل بلدي طازج (" + document.getElementById('minced-type').value + "): " + quantities['minced'] + " كجم [السعر: " + p.toFixed(3) + " د.ب]\n";
+            }
+
+            if(quantities['leever'] > 0) {
+                var p = quantities['leever'] * parseFloat(document.getElementById('leever-type').options[document.getElementById('leever-type').selectedIndex].getAttribute('data-price'));
+                grandTotal += p;
+                orderDetails += "• كبدة وقلوب طازجة (" + document.getElementById('leever-type').value + "): " + quantities['leever'] + " كجم [السعر: " + p.toFixed(3) + " د.ب]\n";
+            }
+
+            if(quantities['burger'] > 0) {
+                var p = quantities['burger'] * parseFloat(document.getElementById('burger-total').getAttribute('data-price'));
+                grandTotal += p;
+                orderDetails += "• برجر لحم الوسام الفاخر: " + quantities['burger'] + " كجم [السعر: " + p.toFixed(3) + " د.ب]\n";
+            }
+
+            if(quantities['tawook'] > 0) {
+                var p = quantities['tawook'] * parseFloat(document.getElementById('tawook-total').getAttribute('data-price'));
+                grandTotal += p;
+                orderDetails += "• شيش طاووق دجاج بالخضار: " + quantities['tawook'] + " كجم [السعر: " + p.toFixed(3) + " د.ب]\n";
+            }
+
+            if(quantities['chicken'] > 0) {
+                var p = quantities['chicken'] * parseFloat(document.getElementById('chicken-total').getAttribute('data-price'));
+                grandTotal += p;
+                orderDetails += "• دجاج متبل كامل بالليمون: " + quantities['chicken'] + " حبة [السعر: " + p.toFixed(3) + " د.ب]\n";
+            }
+
+            if(quantities['egg'] > 0) {
+                var p = quantities['egg'] * parseFloat(document.getElementById('egg-total').getAttribute('data-price'));
+                grandTotal += p;
+                orderDetails += "• طبق بيض طازج: " + quantities['egg'] + " طبق [السعر: " + p.toFixed(3) + " د.ب]\n";
+            }
+
+            if(orderDetails === "") {
+                alert("الرجاء الضغط على الأصناف المرغوبة أولاً وتحديد كميتها قبل إرسال الحجز.");
+                return;
+            }
+
+            var message = "🥩 *طلب حجز مسبق وتجهيز - ملحمة الوسام* 🥩\n\n" +
+                          "👤 *اسم العميل:* " + name + "\n" +
+                          "📅 *موعد الحضور للاستلام:* " + date + "\n" +
+                          "🔪 *طريقة التقطيع:* " + cutting + "\n" +
+                          "📥 *نوع التغليف:* " + packaging + "\n\n" +
+                          "🛒 *الطلبات المحددة باللمس:*\n" + orderDetails + "\n" +
+                          "💰 *إجمالي الفاتورة المتوقع:* " + grandTotal.toFixed(3) + " د.ب\n\n" +
+                          "⚠️ _تنبيه العميل: سأحضر في الموعد المحدد لاستلام الطلب جاهزاً ودفع الحساب بالمحل._";
+
+            var phone = "97335946352";
+            var url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
