@@ -6,99 +6,549 @@
     <title>ملحمة الوسام | اللحوم والمشويات الفاخرة</title>
     <style>
         :root {
-            --bg-color: #fdfaf9;
-            --primary-brown: #a00000; /* أحمر دموي فاخر */
+            --bg-color: #faf7f2;
+            --primary-brown: #a00000; 
             --accent-gold: #c5a880;
-            --text-dark: #2d0000;
+            --text-dark: #2d2522;
             --card-bg: #ffffff;
-            --border-color: #f0dada;
+            --border-color: #ebdccb;
+            --whatsapp-green: #25D366;
         }
         
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: var(--bg-color); color: var(--text-dark); }
-        .container { max-width: 680px; margin: 0 auto; padding: 16px; padding-bottom: 120px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            -webkit-tap-highlight-color: transparent;
+        }
         
-        .brand-header { text-align: center; padding: 40px 20px 30px; background: linear-gradient(to bottom, #fff0f0, var(--bg-color)); border-bottom: 2px solid var(--primary-brown); }
-        .brand-logo { font-size: 2.2rem; font-weight: 800; color: var(--primary-brown); margin: 0 0 8px 0; }
-        .brand-tagline { font-size: 1rem; color: #702020; margin: 0 0 20px 0; }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 16px;
+            padding-bottom: 120px;
+        }
         
-        .badge { background-color: var(--card-bg); border: 1px solid var(--primary-brown); padding: 6px 14px; border-radius: 50px; font-size: 0.85rem; color: var(--primary-brown); font-weight: 600; margin: 5px; display: inline-block; }
+        .brand-header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            background: linear-gradient(to bottom, #f3ede2, var(--bg-color));
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .brand-logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary-brown);
+            margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
+        }
+        
+        .brand-tagline {
+            font-size: 1rem;
+            color: #70625e;
+            margin: 0 0 20px 0;
+        }
+        
+        .meta-badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary-brown);
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
 
-        .section-heading { font-size: 1.25rem; font-weight: 700; color: var(--primary-brown); margin: 30px 4px 16px; }
+        .section-heading {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-brown);
+            margin: 30px 4px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
         
-        .meat-card { background-color: var(--card-bg); border-radius: 24px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 8px 24px rgba(160, 0, 0, 0.08); margin-bottom: 24px; }
-        .card-image-wrapper { width: 100%; height: 280px; background-color: #fff5f5; }
-        .card-image-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+        .meat-card {
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(160, 0, 0, 0.08);
+            margin-bottom: 24px;
+            transition: transform 0.2s ease;
+        }
         
-        .card-content { padding: 24px; }
-        .card-content h2 { font-size: 1.4rem; font-weight: 700; margin: 0 0 8px 0; color: var(--primary-brown); }
+        .card-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            background-color: #fcfbfa;
+        }
         
-        .weight-selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
-        .weight-pill { background-color: var(--card-bg); border: 2px solid #fbdada; border-radius: 16px; padding: 16px 12px; text-align: center; cursor: pointer; }
-        .weight-pill.active { border-color: var(--primary-brown); background-color: #fff0f0; font-weight: bold; }
-        .weight-pill .price { color: var(--primary-brown); font-weight: 700; display: block; }
+        .card-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         
-        .preferences-box { background-color: #fffafa; border-radius: 16px; padding: 18px; border: 1px dashed var(--primary-brown); margin-top: 16px; display: none; }
-        .preferences-box.visible { display: block; }
+        .card-content {
+            padding: 24px;
+        }
         
-        .input-style { width: 100%; padding: 12px; border: 1px solid var(--primary-brown); border-radius: 10px; box-sizing: border-box; }
+        .card-content h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: var(--primary-brown);
+        }
         
-        .sticky-footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background-color: rgba(255, 255, 255, 0.98); border-top: 2px solid var(--primary-brown); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
-        .submit-order-btn { background-color: var(--primary-brown); color: #ffffff; border: none; padding: 14px 28px; border-radius: 50px; font-weight: 700; cursor: pointer; }
+        .card-content .desc {
+            font-size: 0.95rem;
+            color: #665e5b;
+            line-height: 1.6;
+            margin: 0 0 24px 0;
+        }
+        
+        .weight-selector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .weight-pill {
+            background-color: var(--card-bg);
+            border: 2px solid #f0e6db;
+            border-radius: 16px;
+            padding: 16px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .weight-pill:hover {
+            border-color: var(--primary-brown);
+            background-color: #fffdfa;
+        }
+        
+        .weight-pill.active {
+            border-color: var(--primary-brown);
+            background-color: #fbf9f6;
+            font-weight: bold;
+        }
+        
+        .weight-pill .title {
+            display: block;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+        
+        .weight-pill .price {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--primary-brown);
+            font-weight: 700;
+        }
+        
+        .weight-pill.active .price {
+            color: var(--primary-brown);
+        }
+        
+        .preferences-box {
+            background-color: #faf8f5;
+            border-radius: 16px;
+            padding: 18px;
+            border: 1px dashed var(--border-color);
+            margin-top: 16px;
+            display: none;
+        }
+        
+        .preferences-box.visible {
+            display: block;
+        }
+        
+        .pref-group {
+            margin-bottom: 14px;
+        }
+        
+        .pref-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .pref-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary-brown);
+            margin-bottom: 6px;
+        }
+        
+        .pref-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            background-color: #fff;
+            color: var(--text-dark);
+            outline: none;
+        }
+        
+        .checkout-card {
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(74, 44, 42, 0.04);
+        }
+        
+        .checkout-card h3 {
+            margin: 0 0 16px 0;
+            color: var(--primary-brown);
+            font-size: 1.15rem;
+        }
+        
+        .input-style {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            outline: none;
+        }
+        
+        .sticky-footer-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background-color: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border-color);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(74, 44, 42, 0.05);
+        }
+        
+        .price-summary {
+            text-align: right;
+        }
+        
+        .price-summary .label {
+            font-size: 0.8rem;
+            color: #8c7e7a;
+            display: block;
+            margin-bottom: 2px;
+        }
+        
+        .price-summary .amount {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary-brown);
+        }
+        
+        .submit-order-btn {
+            background-color: var(--primary-brown);
+            color: #ffffff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(160, 0, 0, 0.3);
+        }
+        
+        .submit-order-btn:active {
+            transform: scale(0.98);
+        }
+
+        @media(max-width: 480px) {
+            .weight-selector-grid { grid-template-columns: 1fr; }
+            .sticky-footer-bar { padding: 12px 16px; }
+            .submit-order-btn { padding: 12px 20px; font-size: 0.95rem; }
+        }
     </style>
 </head>
 <body>
 
     <div class="brand-header">
         <div class="brand-logo">ملحمة الوسام</div>
-        <div class="brand-tagline">مفهوم جديد للحوم والمشويات الطازجة على أصولها</div>
-        <div>
+        <div class="brand-tagline">مفهوم جديد للحوم والمشويات الطازجة على أصولها فاخرة ونظيفة</div>
+        <div class="meta-badges">
             <span class="badge">📞 35946352</span>
             <span class="badge">📸 @alwisam.bh</span>
+            <span class="badge">🇧🇭 مملكة البحرين</span>
         </div>
     </div>
 
     <div class="container">
-        <!-- قسم اللحوم -->
-        <div class="section-heading">🥩 لحم العجل البلدي والمفروم</div>
+        
+        <div class="section-heading">🥩 لحم العجل البلدي والمفروم الطازج</div>
         <div class="meat-card" id="card-beef">
-            <div class="card-image-wrapper"><img src="https://images.unsplash.com/photo-1603048297172-c92544798d5e?q=80&w=1000" alt="لحم عجل"></div>
+            <div class="card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1603048297172-c92544798d5e?q=80&w=1000&auto=format&fit=crop" alt="لحم عجل بلدي">
+            </div>
             <div class="card-content">
-                <h2>قطع لحم عجل هبرة ومفروم</h2>
+                <h2>قطع لحم عجل هبرة ومفروم طازج</h2>
+                <p class="desc">لحم عجل بلدي فاخر يذبح محلياً بشكل يومي، لحم طري وشهي ومثالي لجميع أنواع الطبخ.</p>
+                
                 <div class="weight-selector-grid">
-                    <div class="weight-pill" onclick="selectProductWeight('beef', '1 كيلو', 5.500, this)"><span>1 كيلو</span><span class="price">5.500 د.ب</span></div>
+                    <div class="weight-pill" onclick="selectProductWeight('beef', '1 كيلو عجل طازج', 5.500, this)">
+                        <span class="title">1 كيلو</span>
+                        <span class="price">5.500 د.ب</span>
+                    </div>
+                    <div class="weight-pill" onclick="selectProductWeight('beef', '2 كيلو عجل طازج', 11.000, this)">
+                        <span class="title">2 كيلو</span>
+                        <span class="price">11.000 د.ب</span>
+                    </div>
+                    <div class="weight-pill" onclick="selectProductWeight('beef', '5 كيلو عجل طازج (عرض)', 26.000, this)">
+                        <span class="title">5 كيلو (عرض توفير)</span>
+                        <span class="price">26.000 د.ب</span>
+                    </div>
                 </div>
+
                 <div class="preferences-box" id="pref-beef">
-                    <label>طريقة التجهيز:</label>
-                    <select id="cut-beef" class="input-style"><option>مفروم</option><option>قطع</option></select>
+                    <div class="pref-group">
+                        <label>طريقة التجهيز والقطعيات:</label>
+                        <select id="cut-beef">
+                            <option value="قطع بدون عظم (هبرة صافي)">قطع بدون عظم (هبرة صافي)</option>
+                            <option value="مفروم عجل ناعم طازج">مفروم ناعم طازج فوراً</option>
+                            <option value="قطع بالعظام للطبخ والكلبسات">قطع بالعظام (للمرق والطبخ)</option>
+                        </select>
+                    </div>
+                    <div class="pref-group">
+                        <label>نوع التغليف المفضل:</label>
+                        <select id="pack-beef">
+                            <option value="تغليف سحب الهواء (شفط)">تغليف سحب الهواء الشامل (حفظ طراوة ممتد)</option>
+                            <option value="أطباق فلين عادية مغلفة">أطباق فلين عادية نظيفة</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- بيانات الحجز -->
-        <div class="checkout-card" style="padding: 20px; border: 1px solid var(--primary-brown); border-radius: 20px;">
-            <h3>📅 بيانات الحجز</h3>
-            <input type="text" id="order-customer-name" placeholder="اسم العميل" class="input-style" style="margin-bottom:10px;">
-            <input type="datetime-local" id="order-pickup-time" class="input-style">
+        <div class="section-heading">🔪 كبدة طازجة يومياً</div>
+        <div class="meat-card" id="card-liver">
+            <div class="card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1594385208974-2e75f8d7522c?q=80&w=1000&auto=format&fit=crop" alt="كبدة طازجة">
+            </div>
+            <div class="card-content">
+                <h2>كبدة وقلوب طازجة ونظيفة بالكامل</h2>
+                <p class="desc">تصل مع الذبائح الصباحية الباكرة، غنية بالطعم والقيمة الغذائية ومجهزة فوراً تحت طلبك.</p>
+                
+                <div class="weight-selector-grid">
+                    <div class="weight-pill" onclick="selectProductWeight('liver', 'نصف كيلو كبدة طازجة', 3.250, this)">
+                        <span class="title">نصف كيلو</span>
+                        <span class="price">3.250 د.ب</span>
+                    </div>
+                    <div class="weight-pill" onclick="selectProductWeight('liver', '1 كيلو كبدة طازجة كاملة', 6.500, this)">
+                        <span class="title">1 كيلو كامل</span>
+                        <span class="price">6.500 د.ب</span>
+                    </div>
+                </div>
+
+                <div class="preferences-box" id="pref-liver">
+                    <div class="pref-group">
+                        <label>أسلوب التنظيف والتقطيع المفضل:</label>
+                        <select id="cut-liver">
+                            <option value="كبدة صافي مقطعة جاهزة للمقلاة">كبدة صافي مقطعة جاهزة للمقلاة</option>
+                            <option value="مشكل كبدة وقلوب كاملة بدون تقطيع">مشكل كبدة وقلوب كاملة</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <div class="section-heading">🍢 قسم المشويات والتتبيلات السرية للوسام</div>
+        <div class="meat-card" id="card-bbq">
+            <div class="card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=1000&auto=format&fit=crop" alt="مشويات متبلة">
+            </div>
+            <div class="card-content">
+                <h2>مشويات فاخرة مجهزة للنار والشوي جاهزة</h2>
+                <p class="desc">متبلة بأجود أنواع البهارات والخلطات الخاصة بملحمتنا لتضمن لك طعماً خرافياً في جلسات الشوي.</p>
+                
+                <div class="weight-selector-grid">
+                    <div class="weight-pill" onclick="selectProductWeight('bbq', '1 كيلو برجر لحم فاخر متبل', 5.800, this)">
+                        <span class="title">كيلو برجر لحم فاخر</span>
+                        <span class="price">5.800 د.ب</span>
+                    </div>
+                    <div class="weight-pill" onclick="selectProductWeight('bbq', '1 كيلو شيش طاووق دجاج بالخضار', 4.800, this)">
+                        <span class="title">كيلو شيش طاووق دجاج</span>
+                        <span class="price">4.800 د.ب</span>
+                    </div>
+                    <div class="weight-pill" onclick="selectProductWeight('bbq', 'حبة دجاج متبل كامل بالليمون', 3.500, this)">
+                        <span class="title">حبة دجاج متبل كامل بالليمون</span>
+                        <span class="price">3.500 د.ب</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-heading">🥚 قسم البيض البلدي الطازج</div>
+        <div class="meat-card" id="card-eggs">
+            <div class="card-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?q=80&w=1000&auto=format&fit=crop" alt="بيض طازج">
+            </div>
+            <div class="card-content">
+                <h2>بيض طازج مكمل للوجبات والمشويات</h2>
+                <p class="desc">بيض بلدي طازج يومياً، يتم فحصه بعناية ليكون الاختيار الأفضل والمثالي لمائدتكم.</p>
+                
+                <div class="weight-selector-grid">
+                    <div class="weight-pill" onclick="selectProductWeight('eggs', 'طبق بيض كامل طازج', 2.200, this)">
+                        <span class="title">طبق كامل (30 حبة)</span>
+                        <span class="price">2.200 د.ب</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="checkout-card">
+            <h3>📅 بيانات حجز موعد الاستلام السريع</h3>
+            <div class="pref-group">
+                <label>اسم العميل الكريم:</label>
+                <input type="text" id="order-customer-name" placeholder="اكتب اسمك الثلاثي" class="input-style">
+            </div>
+            <div class="pref-group" style="margin-top: 14px;">
+                <label>تاريخ ووقت الحضور للمحل للاستلام والطلب جاهز:</label>
+                <input type="datetime-local" id="order-pickup-time" class="input-style">
+            </div>
+        </div>
+
     </div>
 
     <div class="sticky-footer-bar">
-        <div class="price-summary"><div class="amount" id="final-bill-amount">0.000 د.ب</div></div>
-        <button class="submit-order-btn" onclick="submitOrderToWhatsapp()">إرسال الطلب 💬</button>
+        <div class="price-summary">
+            <span class="label">إجمالي قيمة طلبك المتوقع</span>
+            <div class="amount" id="final-bill-amount">0.000 د.ب</div>
+        </div>
+        <button class="submit-order-btn" onclick="submitOrderToWhatsapp()">
+            إرسال وتجهيز الطلب عبر الواتساب 💬
+        </button>
     </div>
 
     <script>
-        var activeOrderSession = { beef: { isSelected: false, weightTitle: '', cost: 0 } };
-        function selectProductWeight(id, label, cost, el) {
-            activeOrderSession[id] = { isSelected: true, weightTitle: label, cost: cost };
-            document.getElementById('pref-' + id).classList.add('visible');
-            document.getElementById('final-bill-amount').innerText = cost.toFixed(3) + " د.ب";
+        var activeOrderSession = {
+            beef:  { isSelected: false, weightTitle: '', cost: 0 },
+            liver: { isSelected: false, weightTitle: '', cost: 0 },
+            bbq:   { isSelected: false, weightTitle: '', cost: 0 },
+            eggs:  { isSelected: false, weightTitle: '', cost: 0 }
+        };
+
+        function selectProductWeight(productId, weightLabel, itemCost, pillElement) {
+            var allSiblings = pillElement.parentNode.getElementsByClassName('weight-pill');
+            for(var i = 0; i < allSiblings.length; i++) {
+                allSiblings[i].classList.remove('active');
+            }
+            
+            pillElement.classList.add('active');
+            
+            activeOrderSession[productId].isSelected = true;
+            activeOrderSession[productId].weightTitle = weightLabel;
+            activeOrderSession[productId].cost = itemCost;
+            
+            var targetPrefBox = document.getElementById('pref-' + productId);
+            if(targetPrefBox) {
+                targetPrefBox.classList.add('visible');
+            }
+            
+            updateLiveTotalSum();
         }
+
+        function updateLiveTotalSum() {
+            var grandTotal = 0;
+            for (var currentKey in activeOrderSession) {
+                if (activeOrderSession[currentKey].isSelected) {
+                    grandTotal += activeOrderSession[currentKey].cost;
+                }
+            }
+            document.getElementById('final-bill-amount').innerText = grandTotal.toFixed(3) + " د.ب";
+        }
+
         function submitOrderToWhatsapp() {
-            var name = document.getElementById('order-customer-name').value;
-            var time = document.getElementById('order-pickup-time').value;
-            var msg = "طلب من " + name + " للوقت " + time;
-            window.open("https://wa.me/97335946352?text=" + encodeURIComponent(msg), '_blank');
+            var clientName = document.getElementById('order-customer-name').value;
+            var pickupTime = document.getElementById('order-pickup-time').value;
+
+            if(!clientName || !pickupTime) {
+                alert("يرجى ملء اسم العميل وموعد الحضور للمحل أولاً لتجهيز طلبكم بدقة.");
+                return;
+            }
+
+            var messageContent = "🥩 *طلب حجز مسبق وتجهيز - ملحمة الوسام الفاخرة* 🥩\n\n" +
+                                 "👤 *اسم العميل:* " + clientName + "\n" +
+                                 "⏰ *موعد الحضور والاستلام:* " + pickupTime + "\n" +
+                                 "━━━━━━━━━━━━━━━\n\n" +
+                                 "🛒 *تفاصيل سلة المنتجات المحددة:*\n\n";
+
+            var totalBillSum = 0;
+            var isCartFilled = false;
+
+            if(activeOrderSession.beef.isSelected) {
+                isCartFilled = true;
+                totalBillSum += activeOrderSession.beef.cost;
+                messageContent += "🥩 *لحم عجل بلدي:* " + activeOrderSession.beef.weightTitle + "\n" +
+                                   "⚙️ *نوع القطعية:* " + document.getElementById('cut-beef').value + "\n" +
+                                   "📥 *نوع التغليف:* " + document.getElementById('pack-beef').value + "\n" +
+                                   "💰 *القيمة:* " + activeOrderSession.beef.cost.toFixed(3) + " د.ب\n\n";
+            }
+
+            if(activeOrderSession.liver.isSelected) {
+                isCartFilled = true;
+                totalBillSum += activeOrderSession.liver.cost;
+                messageContent += "🔪 *قسم الكبدة الطازجة:* " + activeOrderSession.liver.weightTitle + "\n" +
+                                   "🍳 *نوع التجهيز:* " + document.getElementById('cut-liver').value + "\n" +
+                                   "💰 *القيمة:* " + activeOrderSession.liver.cost.toFixed(3) + " د.ب\n\n";
+            }
+
+            if(activeOrderSession.bbq.isSelected) {
+                isCartFilled = true;
+                totalBillSum += activeOrderSession.bbq.cost;
+                messageContent += "🍢 *تتبيلات ومشويات:* " + activeOrderSession.bbq.weightTitle + "\n" +
+                                   "💰 *القيمة:* " + activeOrderSession.bbq.cost.toFixed(3) + " د.ب\n\n";
+            }
+
+            if(activeOrderSession.eggs.isSelected) {
+                isCartFilled = true;
+                totalBillSum += activeOrderSession.eggs.cost;
+                messageContent += "🥚 *طبق بيض طازج:* " + activeOrderSession.eggs.weightTitle + "\n" +
+                                   "💰 *القيمة:* " + activeOrderSession.eggs.cost.toFixed(3) + " د.ب\n\n";
+            }
+
+            if(!isCartFilled) {
+                alert("لطفاً، قم باختيار صنف واحد ووزنه على الأقل قبل إرسال الطلب.");
+                return;
+            }
+
+            messageContent += "━━━━━━━━━━━━━━━\n" +
+                               "💰 *إجمالي الفاتورة الإجمالي المبدئي:* " + totalBillSum.toFixed(3) + " د.ب\n\n" +
+                               "⚠️ _تنويه العميل: سأحضر للملحمة بالموعد المحدد أعلاه لاستلام اللحوم جاهزة ومغلفة بشكل كامل والنظافة مضمونة._";
+
+            var businessPhoneNum = "97335946352";
+            var directWhatsappLink = "https://wa.me/" + businessPhoneNum + "?text=" + encodeURIComponent(messageContent);
+            window.open(directWhatsappLink, '_blank');
         }
     </script>
 </body>
